@@ -1,0 +1,67 @@
+﻿<dotnetnuke type="Package" version="5.0">
+  <packages>
+    <package name="AccordLMS.Providers.Caching.AWSWebFarmCachingProvider" type="Provider" isSystem="true" version="01.00.00">
+      <friendlyName>AccordLMS AWS Web Farm Caching Provider</friendlyName>
+      <description>AccordLMS AWS Web Farm Caching Provider</description>
+      <dependencies/>
+      <owner>
+        <name>AccordLMS</name>
+        <organization>AccordLMS</organization>
+        <url>https://www.accordlms.com</url>
+        <email>info@AccordLMS.com</email>
+      </owner>
+      <license src="license.txt" />
+      <releaseNotes src="releaseNotes.txt" /> 
+      <azureCompatible>true</azureCompatible>
+      <components>
+        <component type="Assembly">
+          <assemblies>
+            <assembly>
+              <path>bin\Providers</path>
+              <name>AccordLMS.Providers.Caching.AWSWebFarmCachingProvider.dll</name>
+            </assembly>
+          </assemblies>
+        </component>
+        <component type="Config">
+          <config>
+            <configFile>web.config</configFile>
+            <install>
+              <configuration>
+                <nodes>
+                  <node path="/configuration/dotnetnuke/caching/providers" action="update" key="name" collision="overwrite">
+                    <add name="AWSWebFarmCachingProvider"
+                         type="AccordLMS.Providers.Caching.AWSWebFarmCachingProvider.AWSWebFarmCachingProvider, AccordLMS.Providers.Caching.AWSWebFarmCachingProvider"
+                         providerPath="~\Providers\CachingProviders\AWSWebFarmCachingProvider\" />
+                  </node>
+				          <node path="/configuration/system.webServer/handlers" action="update" key="name" collision="overwrite">
+                    <add name="AWSWebFarmSynchronizationHandler"
+                         verb="*"
+                         path="AWSWebFarmSync.aspx"
+                         type="AccordLMS.Providers.Caching.AWSWebFarmCachingProvider.AWSWebFarmSynchronizationHandler, AccordLMS.Providers.Caching.AWSWebFarmCachingProvider"
+                         preCondition="integratedMode" />
+                  </node>
+                  <node path="/configuration/system.web/httpHandlers" action="update" key="path" collision="overwrite">
+                    <add verb="*"
+                         path="AWSWebFarmSync.aspx"
+                         type="AccordLMS.Providers.Caching.AWSWebFarmCachingProvider.AWSWebFarmSynchronizationHandler, AccordLMS.Providers.Caching.AWSWebFarmCachingProvider" />
+                  </node>
+                </nodes>
+              </configuration>
+            </install>
+            <uninstall>
+              <configuration>
+                <nodes>
+                  <node path="/configuration/dotnetnuke/caching/providers/add[@name='AWSWebFarmCachingProvider']" action="remove" />
+				          <node path="/configuration/system.webServer/handlers/add[@name='AWSWebFarmSynchronizationHandler']" action="remove" />
+				          <node path="/configuration/system.web/httpHandlers/add[@path='AWSWebFarmSync.aspx']" action="remove" />
+                  <!-- Clear any default to prevent issues loading the site -->
+                  <node path="/configuration/dotnetnuke/caching" action="updateattribute"  name="defaultProvider" value="" />
+                </nodes>
+              </configuration>
+            </uninstall>
+          </config>
+        </component>
+      </components>
+    </package>
+  </packages>
+</dotnetnuke>
