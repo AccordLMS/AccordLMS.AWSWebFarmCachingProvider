@@ -9,5 +9,5 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyProduct("AccordLMS")]
 [assembly: AssemblyCopyright("Copyright © 2008 - 2022")]
 [assembly: AssemblyTrademark("www.accordlms.com")]
-[assembly: AssemblyVersion("1.0.0")]
-[assembly: AssemblyFileVersion("1.0.0")]
+[assembly: AssemblyVersion("1.0.1")]
+[assembly: AssemblyFileVersion("1.0.1")]
