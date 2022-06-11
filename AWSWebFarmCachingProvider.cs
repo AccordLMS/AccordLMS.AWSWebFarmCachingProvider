@@ -107,7 +107,8 @@ namespace AccordLMS.Providers.Caching.AWSWebFarmCachingProvider
             var additionalServers = ServerController.GetEnabledServers()
                 .Where(s => !string.IsNullOrWhiteSpace(s.Url)
                             && s.LastActivityDate >= lastActivityDate
-                            && s.ServerName != Globals.ServerName)
+                            && s.ServerName != Globals.ServerName
+                            )
                 .ToList();
 
             // If we have no additional servers do nothing
@@ -132,8 +133,10 @@ namespace AccordLMS.Providers.Caching.AWSWebFarmCachingProvider
 
                 foreach (IPAddress theaddress in addresslist)
                 {
-                    var notificationUrl = $"{protocol}{theaddress.MapToIPv4()}/AWSWebFarmSync.aspx?command={commandParameter}&detail={detailParameter}";
+                    //var notificationUrl = $"{protocol}{theaddress.MapToIPv4()}/AWSWebFarmSync.aspx?command={commandParameter}&detail={detailParameter}";
+                    var notificationUrl = $"{protocol}{theaddress.MapToIPv4()}/AWSWebFarmSync.aspx?command={commandParameter}&detail={detailParameter}&serverId={server.ServerID}";
                     // var notificationUrl = $"{protocol}{server.Url}/AWSWebFarmSync.aspx?command={commandParameter}&detail={detailParameter}";
+                    //Exceptions.LogException(new Exception("NotifyOtherServers: notificationUrl: " + notificationUrl));
 
                     // Build a webrequest
                     var notificationRequest = WebRequest.CreateHttp(notificationUrl);
@@ -172,6 +175,8 @@ namespace AccordLMS.Providers.Caching.AWSWebFarmCachingProvider
                     // If status code is ok do nothing
                     if (response.StatusCode == HttpStatusCode.OK)
                     {
+                        //TODO: update lastactivity
+
                         return;
                     }
 
@@ -182,6 +187,7 @@ namespace AccordLMS.Providers.Caching.AWSWebFarmCachingProvider
             }
             catch (WebException e)
             {
+                //Exceptions.LogException(new Exception("OnServerNotificationCompleteCallback: WebException: " + e.ToString()));
                 if (e.Status != WebExceptionStatus.RequestCanceled)
                 {
                     Exceptions.LogException(new Exception("Synchronization Error in Request: " + request.RequestUri.AbsoluteUri, e));

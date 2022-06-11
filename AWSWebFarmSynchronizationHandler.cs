@@ -1,10 +1,13 @@
 ﻿namespace AccordLMS.Providers.Caching.AWSWebFarmCachingProvider
 {
+    using System;
+    using System.Linq;
     using System.Web;
 
     using DotNetNuke.Common.Utilities;
     using DotNetNuke.Entities.Host;
     using DotNetNuke.Services.Cache;
+    using DotNetNuke.Services.Exceptions;
 
     /// <summary>
     ///     This synchronization handler receives requests from other servers and passes them to the cache system for
@@ -19,6 +22,31 @@
 
         public void ProcessRequest(HttpContext context)
         {
+            try
+            {
+               // string log = "ProcessRequest: serverId: " + context.Request.QueryString["serverId"];
+                if (!string.IsNullOrWhiteSpace(context.Request.QueryString["serverId"]))
+                {
+                    int serverId = int.Parse(context.Request.QueryString["serverId"]);
+                    var server = ServerController.GetEnabledServers().
+                                Where(s => s.ServerID == serverId).FirstOrDefault();
+
+                    if (server != null && server.LastActivityDate < DateTime.Now.AddMinutes(-40))
+                    {
+                        //log += ". ProcessRequest: server: " + server.ServerName + ", ServerID: " + server.ServerID;
+
+                        server.LastActivityDate = System.DateTime.Now;
+                        ServerController.UpdateServerActivity(server);
+                        //ServerController.ClearCachedServers();
+                    }
+                    //else {
+                    //    log += ". server null or already updated.";
+                    //}
+                }
+                //Exceptions.LogException(new Exception("ProcessRequest: Log: " + log));
+            }
+            catch (System.Exception) { };
+
             // Validate the request for required inputs, return if no action possible
             if (string.IsNullOrWhiteSpace(context.Request.QueryString["command"]))
             {
