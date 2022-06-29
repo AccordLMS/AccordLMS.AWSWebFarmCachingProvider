@@ -39,11 +39,12 @@
                         ServerController.UpdateServerActivity(server);
                         //ServerController.ClearCachedServers();
                     }
-                    //else {
+                    //else
+                    //{
                     //    log += ". server null or already updated.";
                     //}
                 }
-                //Exceptions.LogException(new Exception("ProcessRequest: Log: " + log));
+                //Exceptions.LogException(new Exception("ProcessRequest: Log: " + log + ", URL: " + context.Request.Url.AbsoluteUri));
             }
             catch (System.Exception) { };
 
@@ -61,6 +62,7 @@
             // Only continue if our provider is current
             if (!(CachingProvider.Instance() is Caching.AWSWebFarmCachingProvider.AWSWebFarmCachingProvider))
             {
+                //Exceptions.LogException(new Exception(" Only continue if our provider is current"));
                 return;
             }
 
@@ -75,6 +77,9 @@
 
             // Pass the action on, if the current caching provider is ours
             var provider = (Caching.AWSWebFarmCachingProvider.AWSWebFarmCachingProvider)CachingProvider.Instance();
+
+            //Exceptions.LogException(new Exception("ProcessSynchronizationRequest: command: " + command + ", detail: " + detail));
+
             provider.ProcessSynchronizationRequest(command, detail);
         }
     }

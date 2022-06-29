@@ -8,7 +8,7 @@ namespace AccordLMS.Providers.Caching.AWSWebFarmCachingProvider
     using System.Linq;
     using System.Net;
     using System.Threading;
-
+    using System.Web.Caching;
     using DotNetNuke.Common;
     using DotNetNuke.Common.Utilities;
     using DotNetNuke.Entities.Controllers;
@@ -68,6 +68,7 @@ namespace AccordLMS.Providers.Caching.AWSWebFarmCachingProvider
             // Handle basic removal
             if (command.StartsWith("remove", StringComparison.OrdinalIgnoreCase))
             {
+                //Exceptions.LogException(new Exception("RemoveInternal(" + detail + ")"));
                 this.RemoveInternal(detail);
                 return;
             }
@@ -76,6 +77,7 @@ namespace AccordLMS.Providers.Caching.AWSWebFarmCachingProvider
             if (command.StartsWith("clear~", StringComparison.InvariantCultureIgnoreCase))
             {
                 var commandParts = command.Split('~');
+                //Exceptions.LogException(new Exception("ClearCacheInternal(" + command + ")"));
                 this.ClearCacheInternal(commandParts[1], detail, true);
             }
         }
@@ -131,6 +133,8 @@ namespace AccordLMS.Providers.Caching.AWSWebFarmCachingProvider
 
                 addresslist = Dns.GetHostAddresses(server.ServerName);
 
+                //Exceptions.LogException(new Exception("NotifyOtherServers: addresslist("+ Globals.ServerName + "): " + String.Join(",", addresslist.Select(x => x.MapToIPv4()))));
+
                 foreach (IPAddress theaddress in addresslist)
                 {
                     //var notificationUrl = $"{protocol}{theaddress.MapToIPv4()}/AWSWebFarmSync.aspx?command={commandParameter}&detail={detailParameter}";
@@ -149,6 +153,7 @@ namespace AccordLMS.Providers.Caching.AWSWebFarmCachingProvider
                         notificationRequest.Host = server.Url;
                     }
 
+                    //Exceptions.LogException(new Exception("NotifyOtherServers: notificationUrl: " + notificationUrl + ", notificationRequest.Host:" + notificationRequest.Host));
                     // Create a cookie container so we can get cookies and use default credentials
                     notificationRequest.CookieContainer = new CookieContainer();
                     notificationRequest.UseDefaultCredentials = true;
@@ -175,23 +180,21 @@ namespace AccordLMS.Providers.Caching.AWSWebFarmCachingProvider
                     // If status code is ok do nothing
                     if (response.StatusCode == HttpStatusCode.OK)
                     {
-                        //TODO: update lastactivity
-
                         return;
                     }
 
                     // Otherwise log the failure
-                    Exceptions.LogException(new ApplicationException(
-                        $"Error sending cache server notification.  Url: {request.RequestUri.AbsoluteUri} with a status code {response.StatusCode}"));
+                    //Exceptions.LogException(new ApplicationException(
+                    //$"Error sending cache server notification.  Url: {request.RequestUri.AbsoluteUri} with a status code {response.StatusCode}"));
                 }
             }
             catch (WebException e)
             {
                 //Exceptions.LogException(new Exception("OnServerNotificationCompleteCallback: WebException: " + e.ToString()));
-                if (e.Status != WebExceptionStatus.RequestCanceled)
-                {
-                    Exceptions.LogException(new Exception("Synchronization Error in Request: " + request.RequestUri.AbsoluteUri, e));
-                }
+                //if (e.Status != WebExceptionStatus.RequestCanceled)
+                //{
+                //    Exceptions.LogException(new Exception("Synchronization Error in Request: " + request.RequestUri.AbsoluteUri, e));
+                //}
             }
         }
     }

@@ -92,7 +92,9 @@
   <ItemGroup>
     <Content Include="license.txt" />
     <Content Include="releaseNotes.txt" />
-    <Content Include="testcache.aspx" />
+    <Content Include="testcache.aspx">
+      <SubType>ASPXCodeBehind</SubType>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Providers\" />

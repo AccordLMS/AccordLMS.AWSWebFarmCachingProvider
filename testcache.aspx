@@ -97,6 +97,7 @@ Updated: n/a
     {
         try
         {
+           lblServer.Text = System.Environment.MachineName ;
             lblError.Text = "";
 			var cache = DataCache.GetCache("TestCache");
 			if (cache != null)
@@ -114,6 +115,7 @@ Updated: n/a
     {
         try
         {
+           lblServer.Text = System.Environment.MachineName ;
             lblError.Text = "";
 			DataCache.RemoveCache("TestCache");
         }
@@ -160,6 +162,8 @@ Updated: n/a
             <asp:Label ID="lblResults" runat="server" Text="" CssClass="NormalBold"></asp:Label>
             <p></p>
             <asp:Label ID="lblError" runat="server" Text="" CssClass="NormalRed"></asp:Label>
+            <p></p>
+            <asp:Label ID="lblServer" runat="server" Text="" CssClass="NormalBold"></asp:Label>
             <p></p>
                       
         </asp:Panel>

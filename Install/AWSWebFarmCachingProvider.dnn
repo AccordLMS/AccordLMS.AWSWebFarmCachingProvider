@@ -1,6 +1,6 @@
 ﻿<dotnetnuke type="Package" version="5.0">
   <packages>
-    <package name="AccordLMS.Providers.Caching.AWSWebFarmCachingProvider" type="Provider" isSystem="true" version="01.00.02">
+    <package name="AccordLMS.Providers.Caching.AWSWebFarmCachingProvider" type="Provider" isSystem="true" version="01.00.03">
       <friendlyName>AccordLMS AWS Web Farm Caching Provider</friendlyName>
       <description>AccordLMS AWS Web Farm Caching Provider</description>
       <dependencies/>

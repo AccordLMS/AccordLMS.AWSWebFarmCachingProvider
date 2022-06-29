@@ -18,8 +18,8 @@ COPY ..\bin\Providers\AccordLMS.Providers.Caching.AWSWebFarmCachingProvider.xml 
 
 RD /S /Q "_tempzip\RESOURCES"
 
-"%ProgramFiles%\WinRAR\winrar.exe" M -afzip -m5 -r -ep1 _tempzip\AccordLMS.01.00.02.AWSWebFarmCachingProvider_Install.zip _tempzip\*.*
+"%ProgramFiles%\WinRAR\winrar.exe" M -afzip -m5 -r -ep1 _tempzip\AccordLMS.01.00.03.AWSWebFarmCachingProvider_Install.zip _tempzip\*.*
 
-COPY _tempzip\AccordLMS.01.00.02.AWSWebFarmCachingProvider_Install.zip .\*.*
+COPY _tempzip\AccordLMS.01.00.03.AWSWebFarmCachingProvider_Install.zip .\*.*
 
 RD /S /Q "_tempzip"
